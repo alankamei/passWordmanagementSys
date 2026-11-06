@@ -1,0 +1,23 @@
+{% extends "vault/base.html" %}
+
+{% block title %}VAULT // HOME{% endblock %}
+
+{% block content %}
+    <h2>Welcome</h2>
+    <p>
+        This is your secure, monochrome password vault.
+        Log in to view and manage your saved credentials.
+    </p>
+
+    <p>
+        <a href="{% url 'login' %}" class="btn">LOG IN</a>
+        <a href="/accounts/register/" class="btn">REGISTER</a>
+    </p>
+
+    <hr>
+    <p class="help-text">
+        STATUS: NOT AUTHENTICATED<br>
+        MODE: RETRO MONOCHROME<br>
+        ENCRYPTION: ARGON2 + FERNET (CONFIGURED IN NEXT STEP)
+    </p>
+{% endblock %}

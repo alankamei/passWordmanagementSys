@@ -1,0 +1,21 @@
+{% extends "vault/base.html" %}
+
+{% block title %}VAULT // {{ entry.website }}{% endblock %}
+
+{% block content %}
+    <h2>{{ entry.website }}</h2>
+
+    <table>
+        <tr><th>USERNAME</th><td>{{ entry.username }}</td></tr>
+        <tr><th>PASSWORD</th><td>{{ password }}</td></tr>
+        {% if entry.notes %}<tr><th>NOTES</th><td>{{ entry.notes }}</td></tr>{% endif %}
+        <tr><th>CREATED</th><td>{{ entry.created_at|date:"Y-m-d H:i" }}</td></tr>
+        <tr><th>UPDATED</th><td>{{ entry.updated_at|date:"Y-m-d H:i" }}</td></tr>
+    </table>
+
+    <p>
+        <a href="{% url 'vault_update' entry.pk %}" class="btn">EDIT</a>
+        <a href="{% url 'vault_delete' entry.pk %}" class="btn">DELETE</a>
+        <a href="{% url 'vault_list' %}" class="btn">BACK</a>
+    </p>
+{% endblock %}

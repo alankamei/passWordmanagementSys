@@ -14,19 +14,27 @@
             <nav>
                 {% if user.is_authenticated %}
                     <span>USER: {{ user.username|upper }}</span>
-                    <a href="/">VAULT</a>
+                    <a href="{% url 'vault_list' %}">VAULT</a>
+                    <a href="{% url 'vault_create' %}">+ NEW</a>
                     <form method="post" action="{% url 'logout' %}" style="display:inline">
                         {% csrf_token %}
                         <button type="submit">LOG OUT</button>
                     </form>
                 {% else %}
                     <a href="{% url 'login' %}">LOGIN</a>
-                    <a href="/accounts/register/">REGISTER</a>
+                    <a href="{% url 'register' %}">REGISTER</a>
                 {% endif %}
             </nav>
         </header>
         <hr>
         <main>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             {% block content %}{% endblock %}
         </main>
         <hr>

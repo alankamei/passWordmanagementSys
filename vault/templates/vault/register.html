@@ -1,0 +1,28 @@
+{% extends "vault/base.html" %}
+
+{% block title %}VAULT // REGISTER{% endblock %}
+
+{% block content %}
+    <h2>Create Account</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label|upper }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <p class="help-text">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+                <ul class="errorlist">
+                    {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+
+        <p>
+            <button type="submit">REGISTER</button>
+            <a href="{% url 'login' %}" class="btn">CANCEL</a>
+        </p>
+    </form>
+{% endblock %}

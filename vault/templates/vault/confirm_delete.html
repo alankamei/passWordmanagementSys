@@ -1,0 +1,18 @@
+{% extends "vault/base.html" %}
+
+{% block title %}VAULT // DELETE{% endblock %}
+
+{% block content %}
+    <h2>Delete Entry</h2>
+
+    <p>
+        Are you sure you want to permanently delete
+        <strong>{{ entry.website }}</strong> ({{ entry.username }})?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">YES, DELETE</button>
+        <a href="{% url 'vault_list' %}" class="btn">CANCEL</a>
+    </form>
+{% endblock %}

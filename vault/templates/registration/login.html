@@ -1,0 +1,31 @@
+{% extends "vault/base.html" %}
+
+{% block title %}VAULT // LOGIN{% endblock %}
+
+{% block content %}
+    <h2>Login</h2>
+
+    {% if form.errors %}
+        <p><strong>INVALID USERNAME OR MASTER PASSWORD.</strong></p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_username">USERNAME</label>
+        {{ form.username }}
+
+        <label for="id_password">MASTER PASSWORD</label>
+        {{ form.password }}
+
+        <p>
+            <button type="submit">LOG IN</button>
+            <a href="{% url 'register' %}" class="btn">REGISTER</a>
+        </p>
+    </form>
+
+    <hr>
+    <p class="help-text">
+        YOUR MASTER PASSWORD IS HASHED WITH ARGON2 —<br>
+        EVEN THIS APP CANNOT RECOVER IT IF YOU FORGET IT.
+    </p>
+{% endblock %}

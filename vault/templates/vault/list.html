@@ -1,0 +1,38 @@
+{% extends "vault/base.html" %}
+
+{% block title %}VAULT // ENTRIES{% endblock %}
+
+{% block content %}
+    <h2>Your Vault</h2>
+
+    <p><a href="{% url 'vault_create' %}" class="btn">+ ADD NEW ENTRY</a></p>
+
+    {% if entries %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.website }}</td>
+                        <td>{{ entry.username }}</td>
+                        <td>••••••••</td>
+                        <td>
+                            <a href="{% url 'vault_detail' entry.pk %}">VIEW</a>
+                            <a href="{% url 'vault_update' entry.pk %}">EDIT</a>
+                            <a href="{% url 'vault_delete' entry.pk %}">DELETE</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="help-text">NO ENTRIES YET. CLICK "+ ADD NEW ENTRY" TO GET STARTED.</p>
+    {% endif %}
+{% endblock %}

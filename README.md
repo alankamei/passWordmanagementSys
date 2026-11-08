@@ -188,6 +188,7 @@ password_manager_project/
 
 ---
 
+
 ## License
 
 Educational project. No warranty. Do not use as a production password

@@ -20,6 +20,10 @@ type, inverting buttons, no colors, no icons.
   rounded corners, no shadows
 - **Flash messages** on create / update / delete
 - **Per-view access control** via `@login_required` and queryset filtering
+- **Strong master password enforcement** — minimum 12 characters with
+  uppercase, lowercase, digit, and special character requirements
+- **Password generator** — one-click generation of a cryptographically
+  secure 16-character password when adding or editing an entry
 
 ---
 

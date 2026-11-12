@@ -21,6 +21,8 @@ SECURITY NOTE (MVP):
 
 import base64
 import hashlib
+import secrets
+import string
 
 from cryptography.fernet import Fernet
 from django.conf import settings
@@ -41,3 +43,38 @@ def encrypt_password(plain_text: str) -> str:
 def decrypt_password(encrypted_text: str) -> str:
     """Decrypt a string produced by encrypt_password()."""
     return _get_cipher().decrypt(encrypted_text.encode()).decode()
+
+
+def generate_strong_password(length: int = 16) -> str:
+    """
+    Generate a cryptographically secure random password.
+
+    Uses `secrets` (os.urandom), NOT `random`. Guarantees at least one
+    character from each of: lowercase, uppercase, digit, special.
+    Meets the StrongPasswordValidator requirements by construction.
+    """
+    if length < 12:
+        length = 12  # enforce project minimum
+
+    lowercase = string.ascii_lowercase
+    uppercase = string.ascii_uppercase
+    digits = string.digits
+    special = "!@#$%^&*()-_=+[]{}"
+    all_chars = lowercase + uppercase + digits + special
+
+    # Guarantee at least one of each required class
+    chars = [
+        secrets.choice(lowercase),
+        secrets.choice(uppercase),
+        secrets.choice(digits),
+        secrets.choice(special),
+    ]
+
+    # Fill the remaining length
+    for _ in range(length - len(chars)):
+        chars.append(secrets.choice(all_chars))
+
+    # Shuffle with a cryptographically secure RNG
+    secrets.SystemRandom().shuffle(chars)
+
+    return "".join(chars)

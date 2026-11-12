@@ -142,3 +142,20 @@ label {
     padding-top: 8px;
     margin-top: 8px;
 }
+
+.password-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.password-row input {
+    flex: 1;
+    margin-top: 4px;
+}
+
+.password-row button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    margin-top: 4px;
+}

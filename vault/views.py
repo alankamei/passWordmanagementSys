@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RegisterForm, VaultEntryForm
 from .models import VaultEntry
-from .utils import decrypt_password, encrypt_password
-
+from .utils import decrypt_password, encrypt_password, generate_strong_password
 
 def home(request):
     if request.user.is_authenticated:
@@ -39,6 +38,22 @@ def vault_list(request):
 @login_required
 def vault_create(request):
     if request.method == "POST":
+        # Special case: user clicked GENERATE instead of SAVE
+        if request.POST.get("action") == "generate":
+            generated = generate_strong_password()
+            form = VaultEntryForm(initial={
+                "website": request.POST.get("website", ""),
+                "username": request.POST.get("username", ""),
+                "notes": request.POST.get("notes", ""),
+                "password": generated,
+            })
+            messages.info(request, "Generated a strong password. Review it and click SAVE.")
+            return render(request, "vault/form.html", {
+                "form": form,
+                "title": "ADD NEW ENTRY",
+            })
+
+        # Normal save flow
         form = VaultEntryForm(request.POST)
         if form.is_valid():
             entry = form.save(commit=False)
@@ -65,6 +80,22 @@ def vault_update(request, pk):
     entry = get_object_or_404(VaultEntry, pk=pk, user=request.user)
 
     if request.method == "POST":
+        # Special case: user clicked GENERATE
+        if request.POST.get("action") == "generate":
+            generated = generate_strong_password()
+            form = VaultEntryForm(initial={
+                "website": request.POST.get("website", entry.website),
+                "username": request.POST.get("username", entry.username),
+                "notes": request.POST.get("notes", entry.notes),
+                "password": generated,
+            })
+            messages.info(request, "Generated a strong password. Review it and click SAVE.")
+            return render(request, "vault/form.html", {
+                "form": form,
+                "title": "EDIT ENTRY",
+            })
+
+        # Normal save flow
         form = VaultEntryForm(request.POST)
         if form.is_valid():
             entry.website = form.cleaned_data["website"]
@@ -75,14 +106,12 @@ def vault_update(request, pk):
             messages.success(request, f"Updated {entry.website}.")
             return redirect("vault_list")
     else:
-        form = VaultEntryForm(
-            initial={
-                "website": entry.website,
-                "username": entry.username,
-                "notes": entry.notes,
-                "password": decrypt_password(entry.encrypted_password),
-            }
-        )
+        form = VaultEntryForm(initial={
+            "website": entry.website,
+            "username": entry.username,
+            "notes": entry.notes,
+            "password": decrypt_password(entry.encrypted_password),
+        })
 
     return render(request, "vault/form.html", {"form": form, "title": "EDIT ENTRY"})
 

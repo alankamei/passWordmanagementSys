@@ -7,21 +7,50 @@
 
     <form method="post">
         {% csrf_token %}
-        {% for field in form %}
-            <label for="{{ field.id_for_label }}">{{ field.label|upper }}</label>
-            {{ field }}
-            {% if field.help_text %}
-                <p class="help-text">{{ field.help_text }}</p>
-            {% endif %}
-            {% if field.errors %}
-                <ul class="errorlist">
-                    {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
-                </ul>
-            {% endif %}
-        {% endfor %}
+
+        <!-- Hidden default submit: ensures Enter in any text field triggers SAVE, not GENERATE -->
+        <button type="submit" name="action" value="save" hidden>Save</button>
+
+        <label for="{{ form.website.id_for_label }}">WEBSITE</label>
+        {{ form.website }}
+        {% if form.website.errors %}
+            <ul class="errorlist">
+                {% for error in form.website.errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <label for="{{ form.username.id_for_label }}">USERNAME</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <ul class="errorlist">
+                {% for error in form.username.errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <label for="{{ form.password.id_for_label }}">PASSWORD</label>
+        <div class="password-row">
+            {{ form.password }}
+            <button type="submit" name="action" value="generate">GENERATE</button>
+        </div>
+        {% if form.password.help_text %}
+            <p class="help-text">{{ form.password.help_text }}</p>
+        {% endif %}
+        {% if form.password.errors %}
+            <ul class="errorlist">
+                {% for error in form.password.errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <label for="{{ form.notes.id_for_label }}">NOTES</label>
+        {{ form.notes }}
+        {% if form.notes.errors %}
+            <ul class="errorlist">
+                {% for error in form.notes.errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
 
         <p>
-            <button type="submit">SAVE</button>
+            <button type="submit" name="action" value="save">SAVE</button>
             <a href="{% url 'vault_list' %}" class="btn">CANCEL</a>
         </p>
     </form>
